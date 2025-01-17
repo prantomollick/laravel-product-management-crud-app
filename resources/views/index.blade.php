@@ -6,7 +6,7 @@
         <p class="text-center mb-6 text-lg font-normal text-slate-700 lg:text-xl sm:px-16 xl:px-48">
             This Laravel Product Management System supports creating, reading, updating, and deleting products with ease. Utilizing Eloquent ORM, it offers essential features like sorting, searching, and a user-friendly interface, all while maintaining clean code practices.
         </p>
-        <a href="#" class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">
+        <a href="{{ route('products.create') }}" class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">
             Create Product
             <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
@@ -83,7 +83,7 @@
                         </th>
                        
                         <th scope="col" class="px-6 py-3">
-                            Status
+                            Stock
                         </th>
 
                         <th scope="col" class="px-6 py-3">
@@ -93,6 +93,7 @@
                 </thead>
 
                 <tbody>
+                    @foreach ($products as $product)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td class="w-4 p-4">
                             <div class="flex items-center">
@@ -102,33 +103,36 @@
                         </td>
 
                         <td class="p-4">
-                            <img src="/docs/images/products/apple-watch.png" class="w-16 md:w-32 max-w-full max-h-full" alt="Apple Watch">
+                            <img src="{{ $product->image }}" class="w-16 md:w-32 max-w-full max-h-full" alt="{{ $product->name }}">
                         </td>
 
                         <td class="px-6 py-4">
-                            Apple Watch
+                            {{ $product->name }}
                         </td>
 
+                        @php
+                            $shortDescription = Str::limit($product->description, 20, '...');
+                        @endphp
                         <td class="px-6 py-4">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, tenetur.
+                            {{ $shortDescription }}
                         </td>
 
                         <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                            $2499
+                           $ {{ $product->price }}
                         </td>
 
-                        <td class="px-6 py-4">
-                            <div class="flex items-center">
-                                <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Online
-                            </div>
+                        <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                            {{ $product->stock }}
                         </td>
 
                         <td class="px-6 py-4">
                             <!-- Modal toggle -->
                             <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit user</a>
+                            <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit user</a>
+                            <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit user</a>
                         </td>
                     </tr>
-
+                    @endforeach
                 </tbody>
 
             </table>
