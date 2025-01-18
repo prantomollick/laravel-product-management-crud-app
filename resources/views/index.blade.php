@@ -78,7 +78,7 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                         </svg>
                     </div>
-                    <input type="text" id="table-search-users" class="h-11 block ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search for users">
+                    <input type="text" id="table-search-product" class="h-11 block ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Search for users">
                 </div>
             </div>
 
@@ -115,60 +115,13 @@
                     </tr>
                 </thead>
 
-                <tbody>
-                    @foreach ($products as $product)
-                    <tr class="bg-white border-b hover:bg-gray-50">
-                        {{-- <td class="w-4 p-4">
-                            <div class="flex items-center">
-                                <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                                <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                            </div>
-                        </td> --}}
-                        
-                        <td class="px-6 py-4 font-semibold text-gray-900">
-                            <span class="ml-10">{{ $product->id }}</span>
-                        </td>
-                        
-                        @if($product->image)
-                        <td class="p-4">
-                            <img src="{{ asset('storage/products/' . basename($product->image)) }}" class="w-16 md:w-32 max-w-full max-h-full" alt="{{ $product->name }}">
-                        </td>
-                        @else
-                        <td class="p-4">
-                            <img src="{{ asset('storage/products/default.svg') }}" class="w-16 md:w-32 max-w-full max-h-full" alt="{{ $product->name }}">
-                        </td>
-                        @endif
-
-                        <td class="px-6 py-4">
-                            {{ $product->name }}
-                        </td>
-
-                        @php
-                            $shortDescription = Str::limit($product->description, 20, '...');
-                        @endphp
-                        <td class="px-6 py-4">
-                            {{ $shortDescription }}
-                        </td>
-
-                        <td class="px-6 py-4 font-semibold text-gray-900">
-                           $ {{ $product->price }}
-                        </td>
-
-                        <td class="px-6 py-4 font-semibold text-gray-900">
-                            {{ $product->stock }}
-                        </td>
-
-                        <td class="px-6 py-4">
-                            <!-- Modal toggle -->
-                            <a href="{{ route('products.show', $product->id) }}" type="button" class="font-medium text-blue-600">Show</a> |
-                            <a href="{{ route('products.edit', $product->id) }}" type="button" class="font-medium text-blue-600">Edit</a> | 
-                            <button class="delete-button font-medium text-red-600" data-modal-target="deleteModal" data-modal-show="deleteModal" data-id="{{ $product->id }}">Delete</button>
-                        </td>
-                    </tr>
-                    @endforeach
+                <tbody class="divide-y divide-gray-100" id="product-list">
+                    @include('partials.product_rows', ['products' => $products])
                 </tbody>
 
             </table>
+
+            {{-- {{ !!$products->withqueryString()->links('pagination::tailwind')}} --}}
 
             <!-- Edit user modal -->
             <div id="deleteModal" tabindex="-1" aria-hidden="true" class="bg-slate-300 bg-opacity-85 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
@@ -196,19 +149,34 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
 
     </div>
 </main>
 
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+            $("#table-search-product").on("input", function () {
+            // debugger;
+            let query = $(this).val();
+            console.log(query);
 
+            $.ajax({
+                url: '{{ route("products.search") }}',
+                method: "GET",
+                data: { query: query },
+                success: function (response) {
+                    $('#product-list').html(response);
+                },
+                error: function () {
+                    console.log("An error occurred. Please try again.");
+                },
+            });
+        });
+    });
+</script>
 
 @include('layouts.footer')
-
    
-
-
 
