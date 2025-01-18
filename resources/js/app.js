@@ -7,13 +7,6 @@ window.$ = $;
     const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif"];
     const maxFileSize = 800 * 1024; // 800 KB
 
-    // Ensure CSRF token is included with AJAX requests
-    $.ajaxSetup({
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-    });
-
     // Drag-and-drop handling
     $("#dropzone")
         .on("dragover", function (e) {
@@ -74,6 +67,68 @@ window.$ = $;
             reader.readAsDataURL(file);
         }
     }
+
+    // Form submission handling
+    $("#submit-button").on("click", function (e) {
+        e.preventDefault(); // Prevent default form submission
+
+        // Perform client-side validation
+        $(".text-red-600").addClass("hidden"); // Reset errors
+        let hasError = false;
+
+        if (!$("#product-name").val()) {
+            $("#product-name-error")
+                .text("Product name is required.")
+                .removeClass("hidden");
+            hasError = true;
+        }
+
+        if (!$("#product-price").val()) {
+            $("#product-price-error")
+                .text("Product price is required.")
+                .removeClass("hidden");
+            hasError = true;
+        }
+
+        if (!$("#product-stock").val()) {
+            $("#product-stock-error")
+                .text("Product stock is required.")
+                .removeClass("hidden");
+            hasError = true;
+        }
+
+        if (!$("#product-description").val()) {
+            $("#product-description-error")
+                .text("Product description is required.")
+                .removeClass("hidden");
+            hasError = true;
+        }
+
+        const imageSrc = $("#image-preview").attr("src");
+        if (!$("#product-image")[0].files[0] && imageSrc === "#") {
+            $("#product-image-error")
+                .text("Please upload an image.")
+                .removeClass("hidden");
+            hasError = true;
+        }
+
+        if (hasError) {
+            return;
+        }
+
+        $("#product-form").submit();
+    });
+
+    $(".delete-button").on("click", function () {
+        const productId = $(this).data("id");
+        const actionUrl = `/products/${productId}`;
+        $("#deleteForm").attr("action", actionUrl);
+        $("#deleteModal").removeClass("hidden");
+    });
+
+    $('[data-modal-toggle="deleteModal"]').on("click", function () {
+        $("#deleteModal").addClass("hidden");
+    });
 
     // Submit form with AJAX
     // $("#submit-button").on("click", function () {
