@@ -92,17 +92,36 @@
                         <th scope="col" class="px-16 py-3">
                             <span class="sr-only">Image</span>
                         </th>
-
-                        <th scope="col" class="px-6 py-3">
-                            Name
+                        
+                        <th class="px-6 py-3">
+                            <a href="{{ route('products.index', ['sortBy' => 'name', 'sortOrder' => $sortOrder == 'asc' ? 'desc' : 'asc']) }}">
+                                Name
+                                @if ($sortBy == 'name' && $sortOrder == 'asc')
+                                    &uarr;
+                                @else
+                                    &darr;
+                                @endif
+                            </a>
                         </th>
-
-                        <th scope="col" class="px-6 py-3">
-                            Details
+                        <th class="px-6 py-3">
+                            <a href="{{ route('products.index', ['sortBy' => 'description', 'sortOrder' => $sortOrder == 'asc' ? 'desc' : 'asc']) }}">
+                                Description
+                                @if ($sortBy == 'description' && $sortOrder == 'asc')
+                                    &uarr;
+                                @else
+                                    &darr;
+                                @endif
+                            </a>
                         </th>
-
-                        <th scope="col" class="px-6 py-3">
-                            Price
+                        <th class="px-6 py-3">
+                            <a href="{{ route('products.index', ['sortBy' => 'price', 'sortOrder' => $sortOrder == 'asc' ? 'desc' : 'asc']) }}">
+                                Price
+                                @if ($sortBy == 'price' && $sortOrder == 'asc')
+                                    &uarr;
+                                @else
+                                    &darr;
+                                @endif
+                            </a>
                         </th>
                        
                         <th scope="col" class="px-6 py-3">
@@ -121,7 +140,7 @@
 
             </table>
 
-            {{-- {{ !!$products->withqueryString()->links('pagination::tailwind')}} --}}
+            <div class="mt-4"> {{ $products->appends(request()->input())->links('vendor.pagination.tailwind') }} </div>
 
             <!-- Edit user modal -->
             <div id="deleteModal" tabindex="-1" aria-hidden="true" class="bg-slate-300 bg-opacity-85 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">

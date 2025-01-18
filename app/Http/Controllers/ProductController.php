@@ -8,21 +8,22 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    // https://dribbble.com/shots/24039484-Interactive-Table-Design
     function index(Request $request) {
-        $products = Product::orderBy('id', 'desc')->get();
-
-        // $sortby = $request->get('sortby', 'name'); //Default sorting by name
-
-        // if ($sortby == 'price') {
-        //     $products = Product::orderBy('price', 'asc')->get();
-        // } else if ($sortby == 'stock') {
-        //     $products = Product::orderBy('stock', 'desc')->get();
-        // }
-
-        return view('index', compact('products'));
+        $sortBy = $request->input('sortBy', 'name'); // Default sorting column
+        $sortOrder = $request->input('sortOrder', 'asc'); // Default sorting order
+    
+        $allowedSorts = ['name', 'description', 'price'];
+    
+        if (!in_array($sortBy, $allowedSorts)) {
+            $sortBy = 'name';
+        }
+    
+        $products = Product::orderBy($sortBy, $sortOrder)->paginate(10);
+    
+        return view('index', compact('products', 'sortBy', 'sortOrder'));
     }
-
+    
+    
     function create(Request $request) {
         return view('create');
     }
