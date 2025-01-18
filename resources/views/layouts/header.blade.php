@@ -16,7 +16,7 @@
     <header>
         <nav class="bg-white border-gray-200">
             <div class="xl:container max-w-screen-xl flex flex-wrap items-center justify-between p-4 mx-auto md:py-8">
-                <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+                <a href="{{route('products.index')}}" class="flex items-center space-x-3 rtl:space-x-reverse">
                     <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
                     <span class="self-center text-2xl font-semibold whitespace-nowrap">Product Management App</span>
                 </a>
